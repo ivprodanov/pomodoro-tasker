@@ -18,7 +18,7 @@ export const TaskForm = ({ onAddTask }) => {
 
     // 4. Create the new task object
     const newTask = {
-      id: crypto.randomUUID(),
+      taskId: crypto.randomUUID(),
       title,
       details,
       isCompleted: false,

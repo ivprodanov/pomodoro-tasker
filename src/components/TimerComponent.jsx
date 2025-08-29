@@ -2,53 +2,40 @@ import { useEffect, useState } from "react";
 import { playBellSound } from "./BellSound";
 import { TimerCard } from "./TimerCard";
 import { formatTime } from "../helpers/formatTime";
+import { useSelector, useDispatch } from 'react-redux'
+import { tick, pauseTimer, stopTimer, startTimer } from '../features/timer/timerSlice'
 
 export const TimerComponent = () => {
-  const [timer, setTimer] = useState({
-    secondsLeft: 1500,
-    isActive: false,
-  });
+  const { seconds, isRunning } = useSelector((state) => state.timer)
+  const dispatch = useDispatch();
 
   useEffect(() => {
     let interval = null;
 
-    if (timer.isActive && timer.secondsLeft > 0) {
+    if (seconds > 0 && isRunning) {
       interval = setInterval(() => {
-        setTimer((prev) => ({
-          ...prev,
-          secondsLeft: prev.secondsLeft - 1,
-        }));
+        dispatch(tick())
       }, 1000);
     }
 
-    if (timer.secondsLeft === 0) {
+    if (seconds === 0 && isRunning) {
       playBellSound();
     }
 
-    console.log(timer.secondsLeft);
 
     return () => clearInterval(interval);
-  }, [timer.secondsLeft, timer.isActive]);
+  }, [isRunning, seconds, dispatch]);
 
   const startFunction = () => {
-    setTimer({
-      secondsLeft: 3,
-      isActive: true,
-    });
+    dispatch(startTimer())
   };
 
   const pauseFunction = () => {
-    setTimer((prev) => ({
-      ...prev,
-      isActive: !prev.isActive,
-    }));
+    dispatch(pauseTimer())
   };
 
   const stopFunction = () => {
-    setTimer({
-      secondsLeft: 0,
-      isActive: false,
-    });
+    dispatch(stopTimer())
   };
 
   
@@ -56,7 +43,7 @@ export const TimerComponent = () => {
   return (
     <div>
       <TimerCard
-        time={formatTime(timer.secondsLeft)}
+        time={formatTime(seconds)}
         startFunction={startFunction}
         stopFunction={stopFunction}
         pauseFunction={pauseFunction}

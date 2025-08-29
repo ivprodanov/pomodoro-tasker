@@ -3,11 +3,9 @@ import React, { useEffect, useState } from "react";
 import { ButtonComponent } from "./Button";
 import { TaskComponent } from "./TaskComponent";
 import { TaskForm } from "./TaskForm";
+import { selectAllTasks, toggleTaskCompletion, taskDeleted, taskAdded } from "../features/tasks/taskSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-// This helper can now just save the entire array
-const saveTasksToStorage = (tasks) => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-};
 
 export const TimerCard = ({
   time,
@@ -15,26 +13,25 @@ export const TimerCard = ({
   stopFunction,
   pauseFunction,
 }) => {
-    const [tasks, setTasks] = useState([]);
+    const dispatch = useDispatch();
+    const tasks = useSelector(selectAllTasks)
 
-    // Load tasks from localStorage on initial render
-    useEffect(() => {
-        const storedTasks = JSON.parse(localStorage.getItem('tasks') || "[]");
-        setTasks(storedTasks);
-
-    }, []);
-
-    // This function will handle adding a new task
     const handleAddTask = (newTask) => {
-        // Create the new array of tasks
-        const updatedTasks = [...tasks, newTask];
-        
-        // 1. Update the component's state so the UI rerenders immediately
-        setTasks(updatedTasks);
-        
-        // 2. Save the entire new array to localStorage
-        saveTasksToStorage(updatedTasks);
-    };
+      dispatch(taskAdded(newTask))
+    }
+
+    const handleDeleteTask = (taskId) => {
+      dispatch(taskDeleted(taskId))
+    }
+
+    const handleToggleComplete = (taskId) => {
+      dispatch(toggleTaskCompletion(taskId))
+    }
+
+    useEffect(() => {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }, [tasks]);
+
 
   return (
     <Card sx={{ minWidth: 275, maxWidth: 400 }}>
@@ -50,12 +47,12 @@ export const TimerCard = ({
       </CardContent>
 
       {/* Filter added as a safeguard, and a unique key is added */}
-      {tasks && tasks.filter(task => task).map((task) => (
-        <TaskComponent 
-            key={task.id} 
-            taskTitle={task.title} 
-            taskDetails={task.details} 
-            pomodoros={task.pomodoros}
+      {tasks.map((task) => (
+        <TaskComponent
+          key={task.taskId}
+          task={task}
+          onDelete={() => handleDeleteTask(task.taskId)}
+          onToggle={() => handleToggleComplete(task.taskId)}
         />
       ))}
 
