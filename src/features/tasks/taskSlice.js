@@ -30,6 +30,13 @@ const taskSlice = createSlice({
             if(task, amount > 0) {
                 task.pomodoros = (task.pomodoros || 0) + amount
             }
+        },
+        removeTaskPomodoros: (state, action) => {
+            const {id, amount} = action.payload;
+            const task = state.entities[id];
+            if(task, amount > 0, task.pomodoros > 1) {
+                task.pomodoros = (task.pomodoros || 0) - amount
+            }
         }
     }
 }) 
@@ -41,6 +48,7 @@ export const {
   taskDeleted,
   toggleTaskCompletion,
   addTaskPomodoros,
+  removeTaskPomodoros
 } = taskSlice.actions;
 
 export const {

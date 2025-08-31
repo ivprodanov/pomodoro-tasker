@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ButtonComponent } from "./Button";
 import { TaskComponent } from "./TaskComponent";
 import { TaskForm } from "./TaskForm";
-import { selectAllTasks, toggleTaskCompletion, taskDeleted, taskAdded } from "../features/tasks/taskSlice";
+import { selectAllTasks, toggleTaskCompletion, taskDeleted, taskAdded, addTaskPomodoros, removeTaskPomodoros } from "../features/tasks/taskSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -26,6 +26,15 @@ export const TimerCard = ({
 
     const handleToggleComplete = (taskId) => {
       dispatch(toggleTaskCompletion(taskId))
+    }
+
+    const handleAddPomodoros = (taskId) => {
+      dispatch(addTaskPomodoros({id: taskId, amount: 1}))
+    }
+
+    const handleRemovePomodoros = (taskId) => {
+      dispatch(removeTaskPomodoros({id: taskId, amount: 1}))
+      console.log(taskId, tasks)
     }
 
     useEffect(() => {
@@ -53,6 +62,8 @@ export const TimerCard = ({
           task={task}
           onDelete={() => handleDeleteTask(task.taskId)}
           onToggle={() => handleToggleComplete(task.taskId)}
+          onAddPomodoros={()=> handleAddPomodoros(task.taskId)}
+          onRemovePomodoros={()=> handleRemovePomodoros(task.taskId)}
         />
       ))}
 

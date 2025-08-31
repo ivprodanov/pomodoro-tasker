@@ -1,18 +1,14 @@
 import { Box, Paper, Typography, Checkbox, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Add, Remove } from '@mui/icons-material';
 import React from 'react';
 
-export const TaskComponent = ({ task, onToggle, onDelete }) => {
+export const TaskComponent = ({ task, onToggle, onDelete, onAddPomodoros, onRemovePomodoros }) => {
   return (
     <Box m={2}>
       <Paper elevation={task.isCompleted ? 1 : 3}>
         <Box
           p={2}
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
         >
           <Box>
             <Typography
@@ -30,9 +26,15 @@ export const TaskComponent = ({ task, onToggle, onDelete }) => {
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton onClick={onRemovePomodoros} aria-label="delete task">
+              <Remove />
+            </IconButton>
             <Typography variant='body1' fontWeight={700} mr={2}>
               {task.pomodoros}
             </Typography>
+            <IconButton onClick={onAddPomodoros} aria-label="delete task">
+              <Add />
+            </IconButton>
             <Checkbox
               checked={task.isCompleted}
               onChange={onToggle}

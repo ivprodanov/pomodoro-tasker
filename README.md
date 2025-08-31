@@ -6,7 +6,7 @@
 ### Tasks
 - [x] Delete tasks
 - [x] Mark as complete
-- [ ] Update pomodoro time for individual tasks
+- [x] Update pomodoro time for individual tasks
 - [ ] Reorder tasks with drag and drop (current task)
 - [ ] Finished tasks + their completion time
 
