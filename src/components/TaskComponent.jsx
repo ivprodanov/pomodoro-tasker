@@ -29,7 +29,7 @@ export const TaskComponent = ({ task, onToggle, onDelete, onAddPomodoros, onRemo
             <IconButton onClick={onRemovePomodoros} aria-label="delete task">
               <Remove />
             </IconButton>
-            <Typography variant='body1' fontWeight={700} mr={2}>
+            <Typography variant='body1' fontWeight={700}>
               {task.pomodoros}
             </Typography>
             <IconButton onClick={onAddPomodoros} aria-label="delete task">

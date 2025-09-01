@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 import { playBellSound } from "./BellSound";
 import { TimerCard } from "./TimerCard";
 import { formatTime } from "../helpers/formatTime";
-import { useSelector, useDispatch } from 'react-redux'
-import { tick, pauseTimer, stopTimer, startTimer } from '../features/timer/timerSlice'
+import { useSelector, useDispatch } from "react-redux";
+import {
+  tick,
+  pauseTimer,
+  stopTimer,
+  startTimer,
+  setCustomTime,
+} from "../features/timer/timerSlice";
 
 export const TimerComponent = () => {
-  const { seconds, isRunning } = useSelector((state) => state.timer)
+  const { seconds, isRunning } = useSelector((state) => state.timer);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -14,7 +20,7 @@ export const TimerComponent = () => {
 
     if (seconds > 0 && isRunning) {
       interval = setInterval(() => {
-        dispatch(tick())
+        dispatch(tick());
       }, 1000);
     }
 
@@ -22,23 +28,32 @@ export const TimerComponent = () => {
       playBellSound();
     }
 
-
     return () => clearInterval(interval);
   }, [isRunning, seconds, dispatch]);
 
   const startFunction = () => {
-    dispatch(startTimer())
+    dispatch(startTimer());
   };
 
   const pauseFunction = () => {
-    dispatch(pauseTimer())
+    dispatch(pauseTimer());
   };
 
   const stopFunction = () => {
-    dispatch(stopTimer())
+    dispatch(stopTimer());
   };
 
-  
+  const addOrSubstractFiveMinutes = (add) => {
+    if (add) {
+      let newTime = seconds + 300
+      dispatch(setCustomTime(newTime));
+    }else{
+      if(seconds > 300){
+        let newTime = seconds - 300
+        dispatch(setCustomTime(newTime))
+      }
+    }
+  };
 
   return (
     <div>
@@ -47,8 +62,9 @@ export const TimerComponent = () => {
         startFunction={startFunction}
         stopFunction={stopFunction}
         pauseFunction={pauseFunction}
+        addFive={() => addOrSubstractFiveMinutes(true)}
+        removeFive={() => addOrSubstractFiveMinutes(false)}
       />
-      
     </div>
   );
 };
